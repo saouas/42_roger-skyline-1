@@ -1,16 +1,12 @@
-# 42_roger-skyline-1
-
-Aim : initiation to system and network administration part 2.
-
-**1 - MAJ**
+1 - MAJ
 sudo apt-get update && sudo apt-get upgrade
 Install utils ; sudo apt-get install sudo vim portsentry fail2ban apache2 mailutils -y
 
-**2 - SUDO**
+2 - SUDO
 vi /etc/sudoers
 rajouté sa ligne avec son pseudo dans user privilege
 
-**3 - IP STATIC NETMASK 30**
+3 - IP STATIC NETMASK 30
 vi /etc/network/interfaces
 
 Auto enp0s3
@@ -23,9 +19,9 @@ gateway 10.11.254.254 (par défaut)
 
 	Ifconfig ou ip addr
 
-**4 - SSH**
+	4 - SSH
 
-Se faire un pont (bridge connexion sur VBOX)
+Se faire un pont (bridge connexion sur VBOX) 
 
 	sudo vi /etc/ssh/sshd_config
 
@@ -36,11 +32,12 @@ Se faire un pont (bridge connexion sur VBOX)
 	Now on peut se connecter en ssh avec l’adresse choisi et le port
 	ssh saouas@10.12.30.30 -p 50683
 
+	5 - ssh with public keys
 
 	Sur Mac OS: ajout de la key dans .ssh/authorized_keys
 - Ssh-keygen -t rasa (creation d’une clef)
 	- Ssh-copy-id -I id_rsa.pub ssh saouas@10.12.30.30 -p 50683
-	Apres ca on peut retirer le
+	Apres ca on peut retirer le 
 	PasswordAuthentification no
 	PermitRootLogin no
 	Authorizedkeysfile : renseigner le champs
@@ -48,14 +45,14 @@ Se faire un pont (bridge connexion sur VBOX)
 
 	Sudo service sshd restart
 
-**5 - FIREWALL**
+	5 - FIREWALL
 
 	Source : https://doc.ubuntu-fr.org/iptables
 	Source : http://ipset.netfilter.org/iptables-extensions.man.html
 
 	apt-get install iptables-persistent
 	Iptables-persistent
-	Regle non conserver entre 2 redémarrages
+	Regle non conserver entre 2 redémarrages 
 	sudo vim /etc/network/if-pre-up.d/iptables
 
 	Script :
@@ -110,7 +107,7 @@ Se faire un pont (bridge connexion sur VBOX)
 	Reboot
 	Checker ses règles : sudo iptables -L
 
-	**6 - DOS**
+	6 - DOS
 
 	Créez un fichier de log pour votre serveur Apache pour savoir qui accede au serveur depuis quel ip on aura besoin pour filtrer les attaques
 	sudo touch /var/log/apache2/server.log
@@ -196,13 +193,13 @@ Se faire un pont (bridge connexion sur VBOX)
 
 	Source : https://fr-wiki.ikoula.com/fr/Se_prot%C3%A9ger_contre_le_scan_de_ports_avec_portsentry
 
-	**7 - Disable Service**
+	7 - Disable Service
 
 	List all services available : sudo systemctl list-unit-files
 
 	Sudo systemctl disable <services to disable>
 
-	For example thos one are useless :
+	For example thos one are useless : 
 	sudo systemctl disable console-setup.service
 	sudo systemctl disable keyboard-setup.service
 	sudo systemctl disable apt-daily.timer
@@ -276,7 +273,7 @@ $(GETTING)
 	~
 	~
 
-	**8 - Surveillance script**
+	8 - Surveillance script
 
 	On copie son crontab :
 	Sudo cp /etc/crontab /home/USER/tmp
@@ -292,7 +289,7 @@ $(GETTING)
 	Source : https://doc.fedora-fr.org/wiki/Rediriger_les_mails_root_d%27un_serveur
 	Source : http://www.linuxpedia.fr/doku.php/etc/crontab
 
-	**9 - PARTIE WEB**
+	9 - PARTIE WEB
 	Generer une clé ssl pour 1 an au format x509 en stockant certificat et clé dans deux fichiers separers :
 
 	sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/roger-skyline.com.key -out /etc/ssl/certs/roger-skyline.com.crt
@@ -314,21 +311,21 @@ $(GETTING)
 	sudo a2enmod ssl
 	sudo a2ensite default-ssl
 
-	Ensuite on relance les serveurs apache :
+	Ensuite on relance les serveurs apache : 
 	systemctl reload apache2
 
 	Source : https://codebeamer.com/cb/wiki/2187378
 	Source : https://www.sslmarket.fr/ssl/help-la-difference-entre-certificats
 	Source : https://www.linuxtricks.fr/wiki/creer-un-certificat-auto-signe-et-le-renseigner-dans-apache2-ou-nginx
 
-	**10 - DEPLOIEMENT ANSIBLE**
+	10 - DEPLOIEMENT ANSIBLE
 
-	installation ansible :
+	installation ansible : 
 	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
 	sudo apt-get update
 	sudo apt-get install ansible
 
-	create inventory :
+	create inventory : 
 
 	hosts :
 
@@ -340,4 +337,3 @@ $(GETTING)
 	creates some playsbooks , have fun :)))
 
 source : https://docs.ansible.com/ansible/
-

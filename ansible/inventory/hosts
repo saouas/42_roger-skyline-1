@@ -1,0 +1,2 @@
+[server]
+server1 ansible_host=10.12.30.30 ansible_port=50683  ansible_user=saouas

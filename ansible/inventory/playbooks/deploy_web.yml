@@ -1,0 +1,40 @@
+---
+- name: installation of depedencies
+  hosts: server1
+  become: true
+  become_method: sudo
+  tasks:
+    - name: install apache server
+      apt:
+          name: apache2
+          state: latest
+          update_cache: yes
+          force_apt_get: True
+    
+    - name: enabled mod_rewrite
+      apache2_module:
+        name: rewrite
+        state: present
+    - name: create SSL cert and key
+      command: openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj "/C=FR/ST=Paris/L=France/O=FR.cn" -keyout /etc/ssl/private/roger-skyline.com.key -out /etc/ssl/certs/roger-skyline.com.crt
+    - name: installing SSL cert and key
+      copy:
+          src: /Users/saouas/Desktop/ansible/inventory/ssl/default-ssl.conf
+          dest: /etc/apache2/sites-available/
+          force: yes
+    - name: installing app servers
+      copy:
+          src: /Users/saouas/Desktop/ansible/inventory/website/
+          dest: /var/www/html
+          owner: saouas
+          mode: 0755
+    - name: config test
+      command: apachectl configtest
+    - name: enable ssl mode
+      command: a2enmod ssl
+    - name: deploy ssl in apache
+      command: a2ensite default-ssl
+    - name: restarting app servers
+      service:
+             name: apache2
+             state: restarted

@@ -1,0 +1,38 @@
+---
+- name: installation of depedencies
+  hosts: server1
+  become: true
+  become_method: sudo
+  tasks:
+      - name : system update all packages to latest version
+        apt:
+            upgrade: dist
+            force_apt_get: True
+      - name: system upgrade all packages to lastest version
+        apt:
+          name: "*"
+          state: latest
+          force_apt_get: True
+      - name: install necessary packages
+        apt: name= "{{item}}"
+        with_items:
+          - 'utils'
+          - 'git'
+          - 'portsentry'
+          - 'fail2ban'
+          - 'apache2'
+          - 'mailutils'
+          - 'root'
+          - 'vim'
+      - name: install apache server
+        apt:
+            name: apache2
+            state: latest
+            update_cache: yes
+            force_apt_get: True
+      - name: enabled mod_rewrite
+        apache2_module:
+          name: rewrite
+          state: present
+      - name: restart apache2
+        service: name=apache2 state=restarted
